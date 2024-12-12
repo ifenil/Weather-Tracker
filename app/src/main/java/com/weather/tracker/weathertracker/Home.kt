@@ -1,7 +1,5 @@
 package com.weather.tracker.weathertracker
 
-import android.app.Activity
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -250,28 +249,32 @@ fun FullScreenWeatherDetails(weather: WeatherResponse) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 12.dp),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
             ) {
-                Text(
-                    text = weather.location.name,
-                    color = Color.Black,
-                    fontFamily = FontFamily(Font(R.font.popsemi)),
-                    fontSize = 30.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f)
-                )
 
-                Image(
-                    painter = painterResource(R.drawable.location),
-                    contentDescription = "City Name Icon",
-                    contentScale = ContentScale.Crop,
-                    alignment = Alignment.Center,
-                    modifier = Modifier
-                        .padding(start = 4.dp)
-                        .size(16.dp)
-                )
+                Box(
+                    modifier = Modifier.wrapContentWidth(Alignment.Start)
+                ) {
+                    Text(
+                        text = weather.location.name,
+                        color = Color.Black,
+                        fontFamily = FontFamily(Font(R.font.popsemi)),
+                        fontSize = 30.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(end = 4.dp)
+                    )
+
+                    Image(
+                        painter = painterResource(R.drawable.location),
+                        contentDescription = "City Name Icon",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .size(16.dp)
+                            .align(Alignment.CenterEnd)
+                    )
+                }
             }
 
             Row {
@@ -365,60 +368,63 @@ fun FullScreenWeatherDetails(weather: WeatherResponse) {
 
 @Composable
 fun SearchResultCard(weather: WeatherResponse, onClick: () -> Unit) {
-        Card(
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(24.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xFFF2F2F2)),
+        onClick = onClick
+    ) {
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(Color(0xFFF2F2F2)),
-            onClick = onClick
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.Start
-                    ) {
-                        Text(
-                            text = weather.location.name,
-                            color = Color.Black,
-                            fontFamily = FontFamily(Font(R.font.popsemi)),
-                            fontSize = 20.sp,
-                            modifier = Modifier.padding(bottom = 3.dp)
-                        )
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 16.dp)
+            ) {
+                Text(
+                    text = weather.location.name,
+                    color = Color.Black,
+                    fontFamily = FontFamily(Font(R.font.popsemi)),
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(bottom = 3.dp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
 
-                        Row {
-                            Text(
-                                text = "${weather.current.temperature.toInt()}",
-                                color = Color.Black,
-                                fontFamily = FontFamily(Font(R.font.popsemi)),
-                                fontSize = 60.sp,
-                            )
-
-                            Text(
-                                text = "°",
-                                color = Color.Black,
-                                fontFamily = FontFamily(Font(R.font.popsemi)),
-                                fontSize = 24.sp,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(top = 12.dp, start = 8.dp)
-                            )
-                        }
-                    }
-
-                    Spacer(Modifier.weight(1f))
-
-                    AsyncImage(
-                        model = "https:${weather.current.condition.icon}",
-                        contentDescription = "Weather Icon",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.size(100.dp, 87.dp)
+                Row {
+                    Text(
+                        text = "${weather.current.temperature.toInt()}",
+                        color = Color.Black,
+                        fontFamily = FontFamily(Font(R.font.popsemi)),
+                        fontSize = 60.sp,
                     )
+
+                    Text(
+                        text = "°",
+                        color = Color.Black,
+                        fontFamily = FontFamily(Font(R.font.popsemi)),
+                        fontSize = 24.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(top = 12.dp, start = 8.dp)
+                    )
+                }
             }
+
+            // Image section, the image will take up a fixed space
+            AsyncImage(
+                model = "https:${weather.current.condition.icon}",
+                contentDescription = "Weather Icon",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.size(100.dp, 87.dp)
+            )
         }
+    }
 }
 
 @Composable
