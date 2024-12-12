@@ -49,7 +49,7 @@ implementation(libs.coil.compose)
 
 ## Demo
 
-![Demo Video](https://github.com/ifenil/Weather-Tracker/blob/master/1000020559.gif)
+![Demo Video](https://github.com/ifenil/Weather-Tracker/blob/master/clideo_editor_c9be5d034ef14794ae38479c937d6a97.mp4)
 
 ## 🥱 Direct Link
 ### App Link
