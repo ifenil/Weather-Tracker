@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -37,6 +38,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -250,20 +252,18 @@ fun FullScreenWeatherDetails(weather: WeatherResponse) {
                     .fillMaxWidth()
                     .padding(bottom = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
+                horizontalArrangement = Arrangement.Center
             ) {
+                val screenWidth = LocalConfiguration.current.screenWidthDp.dp
 
-                Box(
-                    modifier = Modifier.wrapContentWidth(Alignment.Start)
-                ) {
-                    Text(
+                Text(
                         text = weather.location.name,
                         color = Color.Black,
                         fontFamily = FontFamily(Font(R.font.popsemi)),
                         fontSize = 30.sp,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(end = 4.dp)
+                        modifier = Modifier.widthIn(max = screenWidth * 0.8f)
                     )
 
                     Image(
@@ -271,11 +271,11 @@ fun FullScreenWeatherDetails(weather: WeatherResponse) {
                         contentDescription = "City Name Icon",
                         contentScale = ContentScale.Fit,
                         modifier = Modifier
+                            .padding(start = 4.dp)
                             .size(16.dp)
-                            .align(Alignment.CenterEnd)
                     )
-                }
             }
+
 
             Row {
                 Text(
