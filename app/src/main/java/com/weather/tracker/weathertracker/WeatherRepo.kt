@@ -11,6 +11,7 @@ class WeatherRepository @Inject constructor(
 ) {
     suspend fun getWeather(location: String, context: Context): Result<WeatherResponse?> {
         return try {
+            // Check if there is an internet connection
             if (!NetworkUtils.isInternetAvailable(context)) {
                 return Result.failure(Exception("No internet connection"))
             }
@@ -19,11 +20,23 @@ class WeatherRepository @Inject constructor(
             val response = weatherService.getWeather(apiKey, location)
 
             if (response.isSuccessful) {
+                // Return the weather data if the response is successful
                 Result.success(response.body())
             } else {
-                Result.failure(Exception("API Error: ${response.message()}"))
+                // Handle different API errors based on the status code
+                when (response.code()) {
+                    400 -> {
+                        // City not found
+                        Result.failure(Exception("400"))
+                    }
+                    else -> {
+                        // Handle other API errors
+                        Result.failure(Exception("404"))
+                    }
+                }
             }
         } catch (e: Exception) {
+            // Catch any other errors, such as network issues or unexpected exceptions
             Result.failure(e)
         }
     }
