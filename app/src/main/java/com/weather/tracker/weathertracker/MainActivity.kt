@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
 import dagger.Module
 import dagger.Provides
@@ -17,7 +18,10 @@ import javax.inject.Singleton
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-     override fun onCreate(savedInstanceState: Bundle?) {
+    private val weatherViewModel: WeatherViewModel by viewModels()
+    private lateinit var sharedPreferencesManager: SharedPreferencesManager
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -26,8 +30,10 @@ class MainActivity : ComponentActivity() {
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
 
-       setContent {
+        sharedPreferencesManager = SharedPreferencesManager(this)
 
+        setContent {
+            WeatherApp(weatherViewModel)
         }
     }
 }

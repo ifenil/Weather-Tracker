@@ -1,4 +1,4 @@
-package com.weather.tracker.weatherapp
+package com.weather.tracker.weathertracker
 
 import android.content.Context
 import android.util.Log

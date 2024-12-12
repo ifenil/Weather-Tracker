@@ -1,4 +1,4 @@
-package com.weather.tracker.nooro
+package com.weather.tracker.weathertracker
 
 import android.content.Context
 import android.content.SharedPreferences

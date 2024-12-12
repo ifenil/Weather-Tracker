@@ -1,4 +1,4 @@
-package com.weather.tracker.weatherapp;
+package com.weather.tracker.weathertracker;
 
 import com.google.gson.annotations.SerializedName
 
