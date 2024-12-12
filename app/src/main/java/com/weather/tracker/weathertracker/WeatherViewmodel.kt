@@ -23,28 +23,35 @@ class WeatherViewModel @Inject constructor(
     private val _loading = mutableStateOf(false)
     val loading: State<Boolean> = _loading
 
+    private val _error = mutableStateOf<String?>(null)
+    val error: State<String?> = _error
+
     init {
-        // Fetch the saved city and load weather data when the ViewModel is initialized
         val savedCity = sharedPreferencesManager.getSavedCity()
         savedCity?.let {
-            getWeather(it, context)  // Fetch weather data for the saved city
+            getWeather(it)
         }
     }
 
-    fun getWeather(city: String, context: Context) {
-        _loading.value = true  // Set loading to true when starting the fetch
+    fun getWeather(city: String) {
+        _loading.value = true
         viewModelScope.launch {
-            val response = weatherRepository.getWeather(city, context = context)
-            _loading.value = false  // Set loading to false after the fetch is complete
-            if (response.isSuccessful) {
-                _weather.value = response.body()
+            val result = weatherRepository.getWeather(city, context)
+            _loading.value = false
+
+            result.onSuccess { weatherResponse ->
+                _weather.value = weatherResponse
+                _error.value = null  // Clear any previous errors
+            }.onFailure { throwable ->
+                _weather.value = null
+                _error.value = throwable.message
             }
         }
     }
 
-    fun saveCity(city: String, context: Context) {
+    fun saveCity(city: String) {
         sharedPreferencesManager.saveCity(city)
-        getWeather(city, context = context)  // After saving the city, fetch the weather data for it
+        getWeather(city)
     }
 
     fun getSavedCity(): String? {

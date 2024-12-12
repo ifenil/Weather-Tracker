@@ -9,18 +9,22 @@ import javax.inject.Inject
 class WeatherRepository @Inject constructor(
     private val weatherService: WeatherService
 ) {
-    suspend fun getWeather(location: String, context: Context): Response<WeatherResponse> {
-        Log.d("WeatherRepository", "Making API call for $location")
+    suspend fun getWeather(location: String, context: Context): Result<WeatherResponse?> {
+        return try {
+            if (!NetworkUtils.isInternetAvailable(context)) {
+                return Result.failure(Exception("No internet connection"))
+            }
 
-        val apiKey = context.getString(R.string.weather_api_key)
-        val response = weatherService.getWeather(apiKey, location)
+            val apiKey = context.getString(R.string.weather_api_key)
+            val response = weatherService.getWeather(apiKey, location)
 
-        // Log the response for debugging
-        if (response.isSuccessful) {
-            Log.d("WeatherRepository", "Response: ${response.body()}")
-        } else {
-            Log.e("WeatherRepository", "Error fetching weather: ${response.message()}")
+            if (response.isSuccessful) {
+                Result.success(response.body())
+            } else {
+                Result.failure(Exception("API Error: ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
         }
-        return response
     }
 }
