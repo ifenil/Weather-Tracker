@@ -55,4 +55,3 @@ implementation(libs.coil.compose)
 ### App Link
 
 [![Download](https://openclipart.org/download/218662/Download-Button.svg)](https://github.com/ifenil/Weather-Tracker/blob/master/app-release.apk)
-```
