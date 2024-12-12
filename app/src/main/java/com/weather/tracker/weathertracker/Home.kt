@@ -62,7 +62,6 @@ fun WeatherApp(
     val isLoading = weatherViewModel.loading.value
     val error = weatherViewModel.error.value
 
-    // State for controlling the visibility of the error dialog
     var showErrorDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(error) {
@@ -134,9 +133,9 @@ fun WeatherApp(
                 savedCity != null && query.isEmpty() -> {
                     weather?.let {
                         FullScreenWeatherDetails(weather = it)
+                        showCard = false
                     }
                 }
-
                 showCard && query.isNotEmpty() -> {
                     weather?.let {
                         SearchResultCard(weather = it, onClick = {
